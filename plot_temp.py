@@ -13,7 +13,7 @@ def main():
 	today_times = [datetime.datetime.strptime(time,'%Y-%m-%d %H:%M:%S') for time in today_times]
 	
 	yest_times = list(yest_df.Time)
-	yest_times = [datetime.datetime.strptime(time,'%Y-%m-%d %H:%M:%S') for time in yest_times]
+	yest_times = [datetime.datetime.strptime(time,'%Y-%m-%d %H:%M:%S') + datetime.timedelta(days=1) for time in yest_times]
 	
 	plt.plot(today_times,today_df.Temp_F,'k-')
 	plt.plot(yest_times,yest_df.Temp_F,'r-')
