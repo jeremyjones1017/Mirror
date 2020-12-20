@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 from noaa_sdk import NOAA
 import pytz
+import wget
+import os
 
 #Colors
 black=(0,0,0)
@@ -51,14 +53,16 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	big_space = screen_width/20
 	main_space = screen_width/60
 	spaces = [main_space,big_space,bigger_space]
+	
 	swans_island_coords = (44.18318112881812,-68.41599063902959)
+	swans_island_zip = '04685'
 	i=0
 	
 	devmode = False
-	try:
-		forecast = get_weather_forecast(swans_island_coords)
-	except:
-		devmode = True
+	#try:
+	forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+	#except:
+	#	devmode = True
 	
 	
 	while True:
@@ -92,7 +96,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		
 		if not devmode:
 			if i%300 == 0 and i != 0:
-				forecast = get_weather_forecast(swans_island_coords)
+				forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
 			
 			if forecast.current_temp <= 32:
 				temp_color = blue
@@ -115,6 +119,15 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 					else:
 						temp_color = white
 					text_display(main_window,forecast.times[i].strftime("%m/%d %I:%M %p")+' '+str(int(forecast.temps[i]))+u'\N{DEGREE SIGN}',0.12*screen_width,0.4*screen_height+forecast_space,temp_color,black,main_font)
+					url = forecast.condition_icon_urls[i]
+					icon_name = convert_url_to_fn(url)
+					if not os.path.exists('images/'+icon_name):
+						icon_loc = wget.download(url, out='images/{}'.format(icon_name))
+					icon_img = pygame.image.load('images/'+icon_name)
+					rect = icon_img.get_rect()
+					main_window.blit(icon_img,(0.15*screen_width,0.4*screen_height+forecast_space))
+					forecast_space += main_space
+					text_display(main_window,forecast.conditions[i],0.12*screen_width,0.4*screen_height+forecast_space,temp_color,black,main_font)
 					forecast_space += main_space
 					
 			forecast_space += main_space
@@ -134,8 +147,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 					text_display(main_window,date.strftime("%m/%d")+' '+str(int(forecast.min_temps[i]))+u'\N{DEGREE SIGN} '+str(int(forecast.max_temps[i]))+u'\N{DEGREE SIGN} ',0.12*screen_width,0.4*screen_height+forecast_space,temp_color,black,main_font)
 					forecast_space += main_space
 		
-			print(forecast.skycover_times)
-			print(forecast.skycover)
+					
 		
 		#if i%60 == 0:
 		#	important_dates_df = read_important_dates()
@@ -253,7 +265,7 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 		days_until_event = (datetime.datetime.strptime(dates[i],'%m/%d') - day_start).days
 		text_display
 
-def get_weather_forecast(coords):
+def get_weather_forecast(coords,zip_code):
 	n = NOAA()
 	forecast = weather()
 	
@@ -263,86 +275,77 @@ def get_weather_forecast(coords):
 	now = et.localize(now)
 	
 	while len(forecast.times) == 0:
-		try:
-			noaa_forecast = n.points_forecast(coords[0],coords[1], type='forecastGridData')
-			temp_forecast = noaa_forecast['properties']['temperature']['values']
-			
-			times = []
-			temps = []
-			
-			for temp_time in temp_forecast:
-				temp_c = temp_time['value']
-				temp_f = temp_c*9/5 + 32
-				strtime =temp_time['validTime'][0:19]
-				
-				UTtime = datetime.datetime.strptime(strtime,"%Y-%m-%dT%H:%M:%S")
-				UTtime = utc.localize(UTtime)
-				ETtime = UTtime.astimezone(et)
-				
-				if ETtime > now:
-					times.append(ETtime)
-					temps.append(temp_f)
-		except:
-			print('Failed to get NOAA data during hourly. Trying again')
+		times = []
+		temps = []
+		conditions = []
+		condition_icon_urls = []
+		#try:
+		'''Hourly Forecast'''
+		hourly_forecast = n.get_forecasts(postal_code=zip_code,country='US',hourly=True)
+		
+		for i in hourly_forecast:
+			if i['number'] == 1: forecast.current_temp = int(i['temperature'])
+			times.append(datetime.datetime.strptime(i['startTime'][:19],"%Y-%m-%dT%H:%M:%S"))
+			temps.append(int(i['temperature']))
+			conditions.append(i['shortForecast'])
+			condition_icon_urls.append(i['icon'])
 		
 		forecast.times = times
 		forecast.temps = temps
-	
-	forecast.current_temp = temps[0]
-	
-	if len(forecast.times) > 0:
-		#noaa_forecast = n.points_forecast(coords[0],coords[1], type='forecastGridData')
-		temp_min_forecast = noaa_forecast['properties']['minTemperature']['values']
-		temp_max_forecast = noaa_forecast['properties']['maxTemperature']['values']
+		forecast.conditions = conditions
+		forecast.condition_icon_urls = condition_icon_urls
+		
+		
+		'''Daily Forecast'''
+		daily_forecast = n.points_forecast(coords[0],coords[1],type='forecastGridData')
+		daily_min_forecast = daily_forecast['properties']['minTemperature']['values']
+		daily_max_forecast = daily_forecast['properties']['maxTemperature']['values']
 		
 		dates = []
 		min_temps = []
 		max_temps = []
 		
-		for i in range(len(temp_min_forecast)):
-			min_temp_c = temp_min_forecast[i]['value']
+		for i in range(len(daily_min_forecast)):
+			min_temp_c = daily_min_forecast[i]['value']
+			max_temp_c = daily_max_forecast[i]['value']
 			min_temp_f = min_temp_c*9/5 + 32
-			max_temp_c = temp_max_forecast[i]['value']
 			max_temp_f = max_temp_c*9/5 + 32
-			strdate = temp_min_forecast[i]['validTime'][0:10]
+			strdate = daily_min_forecast[i]['validTime'][0:10]
 			
 			date = datetime.datetime.strptime(strdate,"%Y-%m-%d")
 			
 			dates.append(date)
 			min_temps.append(min_temp_f)
 			max_temps.append(max_temp_f)
-		#print(date,min_temp_f,max_temp_f)
-		
+			
 		forecast.minmax_dates = dates
 		forecast.min_temps = min_temps
 		forecast.max_temps = max_temps
 		
-		skycover_forecast = noaa_forecast['properties']['skyCover']['values']
-		
-		times = []
-		skycover = []
-		
-		for i in skycover_forecast:
-			times.append(i['validTime'])
-			skycover.append(i['value'])
-			
-		forecast.skycover_times = times
-		forecast.skycover = skycover
+	
+		#except:
+		#	print('Failed to get NOAA data. Trying again')
 	
 	return forecast
+	
+def convert_url_to_fn(url):
+	fn = url.split('/')[4:]
+	fn[-1] = fn[-1].split('?')[0]
+	fn = '_'.join(fn)
+	fn = fn.replace(',','_')
+	
+	return(fn)
 	
 class weather:
 	def __init__(self):
 		self.times = []
 		self.temps = []
 		self.current_temp = -100.
+		self.conditions = []
+		self.condition_icon_urls = []
 		self.minmax_dates = []
 		self.min_temps = []
 		self.max_temps = []
-		self.skycover_times = []
-		self.skycover = []
-		self.precip_times = []
-		self.precipitation = []
 		
 
 if __name__ == '__main__':
