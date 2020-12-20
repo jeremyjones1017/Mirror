@@ -36,6 +36,7 @@ def main():
 		main_window = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 	
 	fpsclock = pygame.time.Clock()
+	pygame.mouse.set_visible(False)
 	while True:
 		run_mirror(main_window,FPS,fpsclock,screen_width,screen_height)
 		
