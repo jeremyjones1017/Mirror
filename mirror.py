@@ -58,11 +58,11 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	swans_island_zip = '04685'
 	i=0
 	
-	devmode = False
-	#try:
-	forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
-	#except:
-	#	devmode = True
+	offline = False
+	try:
+		forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+	except:
+		offline = True
 	
 	
 	while True:
@@ -94,7 +94,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		text_display(main_window,"Cassian's Room",0.9*screen_width,0.09*screen_height,white,black,main_font)
 		text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
 		
-		if not devmode:
+		if not offline:
 			if i%300 == 0 and i != 0:
 				forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
 				
