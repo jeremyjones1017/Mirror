@@ -150,7 +150,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 					pygame.draw.line(main_window,temp_color,(line_x,line_y),(line_x+line_width,line_y))
 					text_display(main_window,date.strftime("%m/%d"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
 					forecast_space += main_space
-					text_display(main_window,'Min: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} Max: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+					text_display(main_window,'Low: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} High: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
 					forecast_space += main_space
 					'''
 					for j,cond_dt in enumerate(forecast.long_conditions_dt):
