@@ -172,7 +172,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		cassian_img = pygame.image.load('images/Cassian_Nov_21_2020.jpg')
 		cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
 		rect = cassian_img.get_rect()
-		main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.7*screen_height))
+		main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
 		
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)):
@@ -276,7 +276,7 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 	day_start = datetime.datetime(day.year, day.month, day.day,0,0,0,0)
 	
 	xpos = 0.5*screen_width
-	ypos = 0.6*screen_height
+	ypos = 0.55*screen_height
 	
 	days_until_event = []
 	for i,event in enumerate(events):
