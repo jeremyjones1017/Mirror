@@ -1,6 +1,20 @@
 Event	Date
+New Year's Day	1/1
+Payton's Birthday	01/15
+Steve's Birthday	02/06
+Our First Anniversary	03/04
+Jonathan's Birthday	03/07
+Tammy's Birthday	05/25
+Gabe's Birthday	06/19
+June's Birthday	06/20
+Wells's Birthday	06/21
+Joey's Birthday	07/08
+Miranda's Birthday	07/11
 Cassian's Birthday	07/16
+Our Maine Anniversary	07/28
+Jayce's Birthday	08/09
 Jeremy's Birthday	10/17
+Leti's Birthday	10/27
+JW's Birthday	11/07
 Christmas	12/25
 Jeep's Birthday	12/30
-New Year's Day	1/1
