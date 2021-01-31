@@ -17,7 +17,7 @@ import os
 black=(0,0,0)
 white=(255,255,255)
 red=(255,0,0)
-blue=(0,150,255)
+blue=(0,200,255)
 orange=(255,165,0)
 green=(0,255,0)
 yellow=(255,255,0)
@@ -456,7 +456,7 @@ def outdoor_temp_color_scale(temp):
 	elif temp == 32:
 		temp_color = blue
 	elif temp > -40:
-		scale_1 = int(150*(temp+40)/72)
+		scale_1 = int(200*(temp+40)/72)
 		scale_2 = int(255*(temp+40)/72)
 		temp_color = (0,scale_1,scale_2)
 	else:
