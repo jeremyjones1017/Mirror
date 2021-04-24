@@ -74,8 +74,6 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		
 		online_time = check_online_time(now)
 		
-		print(online_time)
-		
 		if online_time:
 			do_date(main_window,fonts,spaces,screen_width,screen_height,now)
 			do_time(main_window,fonts,spaces,screen_width,screen_height,now)
