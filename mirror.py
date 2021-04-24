@@ -69,110 +69,118 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		now = datetime.datetime.now()
 		today_start = datetime.datetime(now.year, now.month, now.day,0,0,0,0)
 		main_window.fill(black)
-		do_date(main_window,fonts,spaces,screen_width,screen_height,now)
-		do_time(main_window,fonts,spaces,screen_width,screen_height,now)
-		
-		try:
-			times,temps_c,temps,hum = read_records(now,'office')
-			current_office_temp = int(temps[-1])
-			#do_temp_plot(main_window,fonts,spaces,white,0.85*screen_width,0.1*screen_height,0.1*screen_width,0.1*screen_width,times,temps)
-		except:
-			times,temps_c,temps,hum = [[0],[0],[0],[0]]
-			current_office_temp = '--'
-		try:
-			times,temps_c,temps,hum = read_records(now,'cassian_room')
-			current_cas_temp = int(temps[-1])
-			#do_temp_plot(main_window,fonts,spaces,blue,0.85*screen_width,0.1*screen_height,0.1*screen_width,0.1*screen_width,times,temps,axes=False)
-		except:
-			times,temps_c,temps,hum = [[0],[0],[0],[0]]
-			current_cas_temp = '--'
+		important_dates_df = read_important_dates()
 		
 		
-		text_display(main_window,'Office',0.9*screen_width,0.02*screen_height,white,black,main_font)
-		text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
+		online_time = check_online_time(now)
 		
-		text_display(main_window,"Cassian's Room",0.9*screen_width,0.09*screen_height,white,black,main_font)
-		text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
+		print(online_time)
 		
-		if not offline:
-			if i%300 == 0 and i != 0:
-				forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+		if online_time:
+			do_date(main_window,fonts,spaces,screen_width,screen_height,now)
+			do_time(main_window,fonts,spaces,screen_width,screen_height,now)
+			
+			try:
+				times,temps_c,temps,hum = read_records(now,'office')
+				current_office_temp = int(temps[-1])
+				#do_temp_plot(main_window,fonts,spaces,white,0.85*screen_width,0.1*screen_height,0.1*screen_width,0.1*screen_width,times,temps)
+			except:
+				times,temps_c,temps,hum = [[0],[0],[0],[0]]
+				current_office_temp = '--'
+			try:
+				times,temps_c,temps,hum = read_records(now,'cassian_room')
+				current_cas_temp = int(temps[-1])
+				#do_temp_plot(main_window,fonts,spaces,blue,0.85*screen_width,0.1*screen_height,0.1*screen_width,0.1*screen_width,times,temps,axes=False)
+			except:
+				times,temps_c,temps,hum = [[0],[0],[0],[0]]
+				current_cas_temp = '--'
+			
+			
+			text_display(main_window,'Office',0.9*screen_width,0.02*screen_height,white,black,main_font)
+			text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
+			
+			text_display(main_window,"Cassian's Room",0.9*screen_width,0.09*screen_height,white,black,main_font)
+			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
+			
+			if not offline:
+				if i%300 == 0 and i != 0:
+					forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+					
+				temp_color = outdoor_temp_color_scale(forecast.current_temp)
+				text_display(main_window,"Swans Island",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
+				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,temp_color,black,bigger_font)
 				
-			temp_color = outdoor_temp_color_scale(forecast.current_temp)
-			text_display(main_window,"Swans Island",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
-			text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,temp_color,black,bigger_font)
-			
-			forecast_space = 0
-			text_display(main_window,'Today',0.15*screen_width,0.25*screen_height+forecast_space,white,black,big_font)
-			forecast_space += big_space
-			for ind in [2,4,6,8,10,12]:
-				if len(forecast.temps) > ind+1:
-					temp_color = outdoor_temp_color_scale(forecast.temps[ind])
-					line_x = 0.05*screen_width
-					line_width = 0.2*screen_width
-					line_y = 0.25*screen_height+forecast_space-0.5*main_space
-					pygame.draw.line(main_window,temp_color,(line_x,line_y),(line_x+line_width,line_y))
-					time_str = forecast.times[ind].strftime("%I %p")
-					if time_str[0] == '0': time_str = time_str[1:]
-					text_display(main_window,time_str+' '+str(int(forecast.temps[ind]))+u'\N{DEGREE SIGN}',0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
-					url = forecast.condition_icon_urls[ind]
-					icon_name = convert_url_to_fn(url)
-					if not os.path.exists('images/'+icon_name):
-						icon_loc = wget.download(url, out='images/{}'.format(icon_name))
-					icon_img = pygame.image.load('images/'+icon_name)
-					#rect = icon_img.get_rect()
-					icon_img = pygame.transform.rotozoom(icon_img, 0., 0.3)
-					main_window.blit(icon_img,(0.2*screen_width,0.25*screen_height+forecast_space-0.25*main_space))
-					forecast_space += main_space
-					if len(forecast.conditions[ind]) < 20:
-						text_display(main_window,forecast.conditions[ind],0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
+				forecast_space = 0
+				text_display(main_window,'Today',0.15*screen_width,0.25*screen_height+forecast_space,white,black,big_font)
+				forecast_space += big_space
+				for ind in [2,4,6,8,10,12]:
+					if len(forecast.temps) > ind+1:
+						temp_color = outdoor_temp_color_scale(forecast.temps[ind])
+						line_x = 0.05*screen_width
+						line_width = 0.2*screen_width
+						line_y = 0.25*screen_height+forecast_space-0.5*main_space
+						pygame.draw.line(main_window,temp_color,(line_x,line_y),(line_x+line_width,line_y))
+						time_str = forecast.times[ind].strftime("%I %p")
+						if time_str[0] == '0': time_str = time_str[1:]
+						text_display(main_window,time_str+' '+str(int(forecast.temps[ind]))+u'\N{DEGREE SIGN}',0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
+						url = forecast.condition_icon_urls[ind]
+						icon_name = convert_url_to_fn(url)
+						if not os.path.exists('images/'+icon_name):
+							icon_loc = wget.download(url, out='images/{}'.format(icon_name))
+						icon_img = pygame.image.load('images/'+icon_name)
+						#rect = icon_img.get_rect()
+						icon_img = pygame.transform.rotozoom(icon_img, 0., 0.3)
+						main_window.blit(icon_img,(0.2*screen_width,0.25*screen_height+forecast_space-0.25*main_space))
 						forecast_space += main_space
-					else:
-						texts = split_up_text(forecast.conditions[ind],15)
-						for text in texts:
-							text_display(main_window,text,0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
+						if len(forecast.conditions[ind]) < 20:
+							text_display(main_window,forecast.conditions[ind],0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
 							forecast_space += main_space
-					
-			forecast_space = 0
-			
-			long_term_forecast_xpos = 0.85*screen_width
-			long_term_forecast_ypos = 0.25*screen_height
-			
-			text_display(main_window,'This Week',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,white,black,big_font)
-			forecast_space += big_space
-			for ind,date in enumerate(forecast.minmax_dates):
-				if ind < 5:
-					avg_temp = (forecast.max_temps[ind] + forecast.min_temps[ind])/2
-					temp_color = outdoor_temp_color_scale(avg_temp)
-					line_width = 0.2*screen_width
-					line_x = long_term_forecast_xpos - line_width/2
-					line_y = long_term_forecast_ypos+forecast_space-0.5*main_space
-					pygame.draw.line(main_window,temp_color,(line_x,line_y),(line_x+line_width,line_y))
-					text_display(main_window,date.strftime("%m/%d"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
-					forecast_space += main_space
-					text_display(main_window,'Low: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} High: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
-					forecast_space += main_space
-					'''
-					for j,cond_dt in enumerate(forecast.long_conditions_dt):
-						if cond_dt.date() == date.date():
-							if ''.join(forecast.long_conditions[j]) != '':
-								text_display(main_window,cond_dt.strftime("%I:%M %p"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+						else:
+							texts = split_up_text(forecast.conditions[ind],15)
+							for text in texts:
+								text_display(main_window,text,0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
 								forecast_space += main_space
-								for cond_summary in forecast.long_conditions[j]:
-									if cond_summary != '':
-										text_display(main_window,cond_summary,long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
-										forecast_space += main_space
-					'''
+						
+				forecast_space = 0
+				
+				long_term_forecast_xpos = 0.85*screen_width
+				long_term_forecast_ypos = 0.25*screen_height
+				
+				text_display(main_window,'This Week',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,white,black,big_font)
+				forecast_space += big_space
+				for ind,date in enumerate(forecast.minmax_dates):
+					if ind < 5:
+						avg_temp = (forecast.max_temps[ind] + forecast.min_temps[ind])/2
+						temp_color = outdoor_temp_color_scale(avg_temp)
+						line_width = 0.2*screen_width
+						line_x = long_term_forecast_xpos - line_width/2
+						line_y = long_term_forecast_ypos+forecast_space-0.5*main_space
+						pygame.draw.line(main_window,temp_color,(line_x,line_y),(line_x+line_width,line_y))
+						text_display(main_window,date.strftime("%m/%d"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+						forecast_space += main_space
+						text_display(main_window,'Low: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} High: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+						forecast_space += main_space
+						'''
+						for j,cond_dt in enumerate(forecast.long_conditions_dt):
+							if cond_dt.date() == date.date():
+								if ''.join(forecast.long_conditions[j]) != '':
+									text_display(main_window,cond_dt.strftime("%I:%M %p"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+									forecast_space += main_space
+									for cond_summary in forecast.long_conditions[j]:
+										if cond_summary != '':
+											text_display(main_window,cond_summary,long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
+											forecast_space += main_space
+						'''
 					
 		
-		if i%60 == 0:
-			important_dates_df = read_important_dates()
-		do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
-		
-		cassian_img = pygame.image.load('images/Cassian_Nov_21_2020.jpg')
-		cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
-		rect = cassian_img.get_rect()
-		main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
+				if i%60 == 0:
+					important_dates_df = read_important_dates()
+				do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
+				
+				cassian_img = pygame.image.load('images/Cassian_Nov_21_2020.jpg')
+				cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
+				rect = cassian_img.get_rect()
+				main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
 		
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)):
@@ -448,6 +456,7 @@ def cap_and_clean(input_string):
 	return output_string
 
 def outdoor_temp_color_scale(temp):
+	'''
 	if temp >= 80:
 		temp_color = red
 	elif temp > 32:
@@ -461,8 +470,17 @@ def outdoor_temp_color_scale(temp):
 		temp_color = (0,scale_1,scale_2)
 	else:
 		temp_color = black
+	'''
+	temp_color = white
 	return temp_color
-	
+
+def check_online_time(now):
+	turn_off_time = now.replace(hour=23, minute=0,second=0,microsecond=0)
+	turn_on_time = now.replace(hour=7, minute=0,second=0,microsecond=0)
+	if now > turn_on_time and now < turn_off_time:
+		return True
+	else:
+		return False
 
 class weather:
 	def __init__(self):
