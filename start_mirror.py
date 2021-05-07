@@ -11,7 +11,7 @@ def main():
 		activate_mirror()
 	
 def check_mirror_state():
-	mirror_command = 'python3 /home/pi/Mirror/start_mirror.py'
+	mirror_command = '/home/pi/Mirror/start_mirror.py'
 	ps_command = 'ps aux | grep "{}" > tmp'.format(mirror_command)
 	os.system(ps_command)
 	
