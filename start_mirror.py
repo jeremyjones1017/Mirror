@@ -37,8 +37,8 @@ def check_mirror_state():
 	return mirror_active
 	
 def activate_mirror():
-	import mirror
-	mirror.main()
+	command = 'python3 /home/pi/Mirror/mirror.py'
+	os.system(command)
 
 
 
