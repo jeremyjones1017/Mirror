@@ -52,7 +52,7 @@ def check_mirror_state():
 			#print('1',line)
 		#else:
 		#	print('0',line)
-	if n_open > 2:
+	if n_open > 0:
 		mirror_active = True
 	
 	return mirror_active	
