@@ -2,7 +2,6 @@
 
 import sys
 import time
-import pygame
 import datetime
 import tkinter as tk
 from datetime import timedelta
@@ -59,6 +58,7 @@ def check_mirror_state():
 	
 	
 def start_mirror():
+	import pygame
 	root = tk.Tk()
 	pygame.init()
 	FPS = 1
