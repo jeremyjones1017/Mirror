@@ -59,6 +59,7 @@ def check_mirror_state():
 	
 	
 def start_mirror():
+	print('Starting Mirror')
 	root = tk.Tk()
 	pygame.init()
 	FPS = 1
