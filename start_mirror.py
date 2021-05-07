@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 
-import mirror
 import os
 import csv
 
 def main():
 	mirror_active = check_mirror_state()
+	print(mirror_active)
 	
 	if mirror_active == False:
 		activate_mirror()
 	
 def check_mirror_state():
-	mirror_command = 'sh -c cd /home/pi/Mirror/ && python3 mirror.py'
-	#mirror_command = 'sh -c cd /home/pi/Programing/Mirror/ && python3 mirror.py w'
+	mirror_command = 'python3 start_mirror.py'
 	ps_command = 'ps aux | grep "{}" > tmp'.format(mirror_command)
 	os.system(ps_command)
 	
@@ -25,14 +24,20 @@ def check_mirror_state():
 	os.remove('tmp')
 	
 	mirror_active = False
+	n_open = 0
 	for line in ps_output:
 		if mirror_command in line[0] and 'grep' not in line[0]:
-			mirror_active = True
-			break
+			n_open+=1
+			#print('1',line)
+		#else:
+		#	print('0',line)
+	if n_open > 1:
+		mirror_active = True
 	
 	return mirror_active
 	
 def activate_mirror():
+	import mirror
 	mirror.main()
 
 
