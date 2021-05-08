@@ -24,6 +24,8 @@ green=(0,255,0)
 yellow=(255,255,0)
 purple=(128,0,128)
 
+mirror_path='/home/pi/Mirror/'
+
 def main():
 	mirror_active = check_mirror_state()
 	print(mirror_active)
@@ -159,9 +161,9 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 						text_display(main_window,time_str+' '+str(int(forecast.temps[ind]))+u'\N{DEGREE SIGN}',0.12*screen_width,0.25*screen_height+forecast_space,temp_color,black,main_font)
 						url = forecast.condition_icon_urls[ind]
 						icon_name = convert_url_to_fn(url)
-						if not os.path.exists('images/'+icon_name):
-							icon_loc = wget.download(url, out='images/{}'.format(icon_name))
-						icon_img = pygame.image.load('images/'+icon_name)
+						if not os.path.exists(mirror_path+'images/'+icon_name):
+							icon_loc = wget.download(url, out=mirror_path+'images/{}'.format(icon_name))
+						icon_img = pygame.image.load(mirror_path+'images/'+icon_name)
 						#rect = icon_img.get_rect()
 						icon_img = pygame.transform.rotozoom(icon_img, 0., 0.3)
 						main_window.blit(icon_img,(0.2*screen_width,0.25*screen_height+forecast_space-0.25*main_space))
@@ -211,7 +213,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 					important_dates_df = read_important_dates()
 				do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
 				
-				cassian_img = pygame.image.load('images/Cassian_Nov_21_2020.jpg')
+				cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
 				cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
 				rect = cassian_img.get_rect()
 				main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
@@ -305,7 +307,7 @@ def read_records(day,location):
 	return minutes,tc,tf,hum
 
 def read_important_dates():
-	fn = 'important_dates.txt'
+	fn = mirror_path+'important_dates.txt'
 	df = pd.read_csv(fn,delimiter='\t')
 	
 	return df
