@@ -92,13 +92,19 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	main_space = screen_width/45
 	spaces = [main_space,big_space,bigger_space]
 	
-	swans_island_coords = (44.18318112881812,-68.41599063902959)
-	swans_island_zip = '04685'
+	coords_dict = dict()
+	zip_dict = dict()
+	coords_dict['Swans Island'] = (44.18318112881812,-68.41599063902959)
+	zip_dict['Swans Island'] = '04685'
+	coords_dict['Atlanta'] = (33.79576704668911,-84.33303341246213)
+	zip_dict['Atlanta'] = '30306'
+	
 	i=0
 	
 	offline = False
 	try:
-		forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+		location = 'Atlanta'
+		forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
 	except:
 		offline = True
 	
@@ -132,7 +138,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				current_cas_temp = '--'
 			
 			
-			text_display(main_window,'Office',0.9*screen_width,0.02*screen_height,white,black,main_font)
+			text_display(main_window,'Sitting Room',0.9*screen_width,0.02*screen_height,white,black,main_font)
 			text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
 			
 			text_display(main_window,"Cassian's Room",0.9*screen_width,0.09*screen_height,white,black,main_font)
@@ -143,7 +149,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 					forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
 					
 				temp_color = outdoor_temp_color_scale(forecast.current_temp)
-				text_display(main_window,"Swans Island",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
+				text_display(main_window,"Atlanta",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
 				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,temp_color,black,bigger_font)
 				
 				forecast_space = 0
