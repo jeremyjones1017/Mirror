@@ -146,7 +146,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			
 			if not offline:
 				if i%300 == 0 and i != 0:
-					forecast = get_weather_forecast(swans_island_coords,swans_island_zip)
+					forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
 					
 				temp_color = outdoor_temp_color_scale(forecast.current_temp)
 				text_display(main_window,"Atlanta",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
