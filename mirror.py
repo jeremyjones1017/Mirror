@@ -24,7 +24,7 @@ green=(0,255,0)
 yellow=(255,255,0)
 purple=(128,0,128)
 
-mirror_path='/home/pi/Mirror/'
+mirror_path='/home/pi/Programing/Mirror/'
 
 def main():
 	mirror_active = check_mirror_state()
@@ -130,9 +130,14 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				times,temps_c,temps,hum = [[0],[0],[0],[0]]
 				current_office_temp = '--'
 			try:
+				times,temps_c,temps,hum = read_records(now,'mirror')
+				current_mirror_temp = int(temps[-1])
+			except:
+				times,temps_c,temps,hum = [[0],[0],[0],[0]]
+				current_cas_temp = '--'
+			try:
 				times,temps_c,temps,hum = read_records(now,'cassian_room')
 				current_cas_temp = int(temps[-1])
-				#do_temp_plot(main_window,fonts,spaces,blue,0.85*screen_width,0.1*screen_height,0.1*screen_width,0.1*screen_width,times,temps,axes=False)
 			except:
 				times,temps_c,temps,hum = [[0],[0],[0],[0]]
 				current_cas_temp = '--'
@@ -141,16 +146,19 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			text_display(main_window,'Sitting Room',0.9*screen_width,0.02*screen_height,white,black,main_font)
 			text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
 			
-			text_display(main_window,"Cassian's Room",0.9*screen_width,0.09*screen_height,white,black,main_font)
-			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
-			
+			text_display(main_window,"Bedroom",0.9*screen_width,0.09*screen_height,white,black,main_font)
+			text_display(main_window,str(current_mirror_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
+
+			text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
+			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,white,black,bigger_font)
+
 			if not offline:
 				if i%300 == 0 and i != 0:
 					forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
 					
 				temp_color = outdoor_temp_color_scale(forecast.current_temp)
-				text_display(main_window,"Atlanta",0.9*screen_width,0.16*screen_height,temp_color,black,main_font)
-				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,temp_color,black,bigger_font)
+				text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,temp_color,black,main_font)
+				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
 				
 				forecast_space = 0
 				text_display(main_window,'Today',0.15*screen_width,0.25*screen_height+forecast_space,white,black,big_font)
@@ -186,7 +194,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				forecast_space = 0
 				
 				long_term_forecast_xpos = 0.85*screen_width
-				long_term_forecast_ypos = 0.25*screen_height
+				long_term_forecast_ypos = 0.32*screen_height
 				
 				text_display(main_window,'This Week',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,white,black,big_font)
 				forecast_space += big_space
