@@ -24,7 +24,7 @@ green=(0,255,0)
 yellow=(255,255,0)
 purple=(128,0,128)
 
-mirror_path='/home/pi/Programing/Mirror/'
+mirror_path='/home/pi/Mirror/'
 
 def main():
 	mirror_active = check_mirror_state()
