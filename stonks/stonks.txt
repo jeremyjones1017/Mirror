@@ -1,0 +1,3 @@
+stonk	trade_type	shares	trade_date	price
+AAPL	buy	1	08-12-2021	0.00
+SDGA	buy	1	08-13-2021	28.35

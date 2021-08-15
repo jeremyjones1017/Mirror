@@ -122,6 +122,9 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		if online_time:
 			do_date(main_window,fonts,spaces,screen_width,screen_height,now)
 			do_time(main_window,fonts,spaces,screen_width,screen_height,now)
+			if i%300 == 0:
+				stonk_list = get_stonks()
+			display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list)
 			
 			try:
 				times,temps_c,temps,hum = read_records(now,'office')
@@ -250,7 +253,7 @@ def do_date(main_window,fonts,spaces,screen_width,screen_height,now):
 	[small_font,main_font,big_font,bigger_font] = fonts
 	[main_space,big_space,bigger_space] = spaces
 	xpos = 0.12*screen_width
-	ypos = 0.05*screen_height
+	ypos = 0.02*screen_height
 	text_display(main_window,now.strftime("%b %Y"),xpos,ypos,white,black,main_font)
 	ypos += big_space
 	text_display(main_window,now.strftime("%d"),xpos,ypos,white,black,bigger_font)
@@ -265,6 +268,38 @@ def do_time(main_window,fonts,spaces,screen_width,screen_height,now):
 	ypos = 0.03*screen_height
 	text_display(main_window,now.strftime("%I:%M %p"),xpos,ypos,white,black,bigger_font)
 	
+def get_stonks():
+	import stonks
+	days_ago_list = [0,20,120,250]
+	stonk_list = stonks.stonks(days_ago_list)
+	return stonk_list
+
+def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list):
+	[small_font,main_font,big_font,bigger_font] = fonts
+	[main_space,big_space,bigger_space] = spaces
+	
+	n_mos=[0,1,6,12]
+	
+	xpos = 0.14*screen_width
+	ypos = 0.12*screen_height
+	
+	text_display(main_window,'Stonks',xpos,ypos,white,black,big_font)
+	ypos+=big_space
+	current_value = stonk_list[0][1]
+	text_display(main_window,'{}: ${:,.2f}'.format(str(stonk_list[0][2])[0:10],current_value),xpos,ypos,white,black,main_font)
+	ypos+=main_space
+	i=1
+	while i < len(stonk_list):
+		difference = current_value - stonk_list[i][1]
+		#text = '{:,.2f}% in the last {} mos'.format(100.*difference/stonk_list[i][1],n_mos[i])
+		if difference > 0:
+			sign = '+'
+		else:
+			sign = ''
+		text = '{} mo) '.format(n_mos[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
+		text_display(main_window,text,xpos,ypos,white,black,main_font)
+		ypos+=main_space
+		i+=1
 	
 def do_temp_plot(main_window,fonts,spaces,color,plot_xcord,plot_ycord,plot_width,plot_height,times,temps,axes=True):
 	if axes:

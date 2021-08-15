@@ -1,0 +1,3 @@
+transfer_type	date	amount
+deposit	08-12-2021	20.00
+deposit	08-12-2021	10.00
