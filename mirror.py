@@ -24,6 +24,7 @@ green=(0,255,0)
 yellow=(255,255,0)
 purple=(128,0,128)
 
+#mirror_path='/home/pi/Programing/Mirror/'
 mirror_path='/home/pi/Mirror/'
 
 def main():
@@ -82,7 +83,7 @@ def start_mirror():
 		
 def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	bigger_font = pygame.font.Font('freesansbold.ttf',int(screen_width/15))
-	big_font = pygame.font.Font('freesansbold.ttf',int(screen_width/20))
+	big_font = pygame.font.Font('freesansbold.ttf',int(screen_width/20))   
 	main_font = pygame.font.Font('freesansbold.ttf',int(screen_width/60))
 	small_font = pygame.font.Font('freesansbold.ttf',int(screen_width/100))
 	fonts = [small_font,main_font,big_font,bigger_font]
@@ -259,9 +260,10 @@ def do_date(main_window,fonts,spaces,screen_width,screen_height,now):
 def do_time(main_window,fonts,spaces,screen_width,screen_height,now):
 	[small_font,main_font,big_font,bigger_font] = fonts
 	[main_space,big_space,bigger_space] = spaces
-	xpos = 0.12*screen_width
-	ypos = 0.02*screen_height
-	text_display(main_window,now.strftime("%I:%M:%S %p"),xpos,ypos,white,black,main_font)
+	
+	xpos = 0.5*screen_width
+	ypos = 0.03*screen_height
+	text_display(main_window,now.strftime("%I:%M %p"),xpos,ypos,white,black,bigger_font)
 	
 	
 def do_temp_plot(main_window,fonts,spaces,color,plot_xcord,plot_ycord,plot_width,plot_height,times,temps,axes=True):
