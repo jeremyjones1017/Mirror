@@ -285,21 +285,24 @@ def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_lis
 	
 	text_display(main_window,'Stonks',xpos,ypos,white,black,big_font)
 	ypos+=big_space
-	current_value = stonk_list[0][1]
-	text_display(main_window,'{}: ${:,.2f}'.format(str(stonk_list[0][2])[0:10],current_value),xpos,ypos,white,black,main_font)
-	ypos+=main_space
-	i=1
-	while i < len(stonk_list):
-		difference = current_value - stonk_list[i][1]
-		#text = '{:,.2f}% in the last {} mos'.format(100.*difference/stonk_list[i][1],n_mos[i])
-		if difference > 0:
-			sign = '+'
-		else:
-			sign = ''
-		text = '{} mo) '.format(n_mos[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
-		text_display(main_window,text,xpos,ypos,white,black,main_font)
+	try:
+		current_value = stonk_list[0][1]
+		text_display(main_window,'{}: ${:,.2f}'.format(str(stonk_list[0][2])[0:10],current_value),xpos,ypos,white,black,main_font)
 		ypos+=main_space
-		i+=1
+		i=1
+		while i < len(stonk_list):
+			difference = current_value - stonk_list[i][1]
+			#text = '{:,.2f}% in the last {} mos'.format(100.*difference/stonk_list[i][1],n_mos[i])
+			if difference > 0:
+				sign = '+'
+			else:
+				sign = ''
+			text = '{} mo) '.format(n_mos[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
+			text_display(main_window,text,xpos,ypos,white,black,main_font)
+			ypos+=main_space
+			i+=1
+	except:
+		text_display(main_window,'stonks failed to load :(',xpos,ypos,white,black,main_font)
 	
 def do_temp_plot(main_window,fonts,spaces,color,plot_xcord,plot_ycord,plot_width,plot_height,times,temps,axes=True):
 	if axes:
