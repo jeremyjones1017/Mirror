@@ -102,13 +102,14 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	
 	i=0
 	
-	offline = False
-	try:
-		location = 'Atlanta'
-		forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
-	except:
-		offline = True
+	#offline = False
+	#try:
+	location = 'Atlanta'
+	forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
+	#except:
+	#	offline = True
 	
+	#if forecast == None: offline = True
 	
 	while True:
 		now = datetime.datetime.now()
@@ -156,14 +157,18 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
 			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,white,black,bigger_font)
 
-			if not offline:
-				if i%300 == 0 and i != 0:
-					forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
-					
-				temp_color = outdoor_temp_color_scale(forecast.current_temp)
-				text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,temp_color,black,main_font)
-				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
+			if i%300 == 0 and i != 0:
+				forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
 				
+			text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,white,black,main_font)
+			if forecast != None:
+				temp_color = outdoor_temp_color_scale(forecast.current_temp)
+				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
+			else:
+				text_display(main_window,'--',0.9*screen_width,0.23*screen_height+big_space,white,black,bigger_font)
+			
+			if forecast != None:
+				temp_color = outdoor_temp_color_scale(forecast.current_temp)
 				forecast_space = 0
 				text_display(main_window,'Today',0.15*screen_width,0.25*screen_height+forecast_space,white,black,big_font)
 				forecast_space += big_space
@@ -214,27 +219,16 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 						forecast_space += main_space
 						text_display(main_window,'Low: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} High: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
 						forecast_space += main_space
-						'''
-						for j,cond_dt in enumerate(forecast.long_conditions_dt):
-							if cond_dt.date() == date.date():
-								if ''.join(forecast.long_conditions[j]) != '':
-									text_display(main_window,cond_dt.strftime("%I:%M %p"),long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
-									forecast_space += main_space
-									for cond_summary in forecast.long_conditions[j]:
-										if cond_summary != '':
-											text_display(main_window,cond_summary,long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
-											forecast_space += main_space
-						'''
-					
-		
-				if i%60 == 0:
-					important_dates_df = read_important_dates()
-				do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
 				
-				cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
-				cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
-				rect = cassian_img.get_rect()
-				main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
+	
+			if i%60 == 0:
+				important_dates_df = read_important_dates()
+			do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
+			
+			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
+			cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
+			rect = cassian_img.get_rect()
+			main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
 		
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)):
@@ -416,12 +410,12 @@ def get_weather_forecast(coords,zip_code):
 	now = datetime.datetime.now()
 	now = et.localize(now)
 	
-	while len(forecast.times) == 0:
-		times = []
-		temps = []
-		conditions = []
-		condition_icon_urls = []
-		#try:
+	#while len(forecast.times) == 0:
+	times = []
+	temps = []
+	conditions = []
+	condition_icon_urls = []
+	try:
 		'''Hourly Forecast'''
 		hourly_forecast = n.get_forecasts(postal_code=zip_code,country='US',hourly=True)
 		
@@ -489,8 +483,8 @@ def get_weather_forecast(coords,zip_code):
 		forecast.long_conditions_dt = long_conditions_dt
 		forecast.long_conditions = long_conditions
 	
-		#except:
-		#	print('Failed to get NOAA data. Trying again')
+	except:
+		return None
 	
 	return forecast
 	
