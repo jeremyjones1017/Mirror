@@ -264,7 +264,7 @@ def do_time(main_window,fonts,spaces,screen_width,screen_height,now):
 	
 def get_stonks():
 	import stonks
-	days_ago_list = [0,20,120,250]
+	days_ago_list = [0,1,5,20]
 	stonk_list = stonks.stonks(days_ago_list)
 	return stonk_list
 
@@ -272,7 +272,7 @@ def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_lis
 	[small_font,main_font,big_font,bigger_font] = fonts
 	[main_space,big_space,bigger_space] = spaces
 	
-	n_mos=[0,1,6,12]
+	time_ago = ['0d','1d','1wk','1mo']
 	
 	xpos = 0.14*screen_width
 	ypos = 0.12*screen_height
@@ -291,7 +291,7 @@ def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_lis
 				sign = '+'
 			else:
 				sign = ''
-			text = '{} mo) '.format(n_mos[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
+			text = '{}: '.format(time_ago[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
 			text_display(main_window,text,xpos,ypos,white,black,main_font)
 			ypos+=main_space
 			i+=1
