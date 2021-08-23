@@ -2,3 +2,4 @@ transfer_type	date	amount
 deposit	08-12-2021	20.00
 deposit	08-12-2021	10.00
 deposit	08-16-2021	100.00
+deposit	08-22-2021	870.00
