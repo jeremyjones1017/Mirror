@@ -265,7 +265,10 @@ def do_time(main_window,fonts,spaces,screen_width,screen_height,now):
 def get_stonks():
 	import stonks
 	days_ago_list = [0,1,5,20]
-	stonk_list = stonks.stonks(days_ago_list)
+	try:
+		stonk_list = stonks.stonks(days_ago_list)
+	except:
+		stonk_list = None
 	return stonk_list
 
 def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list):
