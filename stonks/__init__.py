@@ -1,14 +1,17 @@
-import pynance as pn
 import pandas as pd
 import os
 import datetime
+import json
+import math
 
 def main():
-	os.system('clear')
-	days_ago_list = [0,20,120,250]
-	stonks = stonks(days_ago_list)
-	for i in stonks:
-		print(i)
+	#days_ago_list = [0,1,5,20]
+	days_ago_list = range(30)
+	
+	data = stonks(days_ago_list)
+	
+	for i in data:
+		print(i[1])
 	
 def stonks(days_ago_list):
 	stonks_df = pd.read_csv('stonks/stonks.txt',delimiter='\t')
@@ -18,13 +21,11 @@ def stonks(days_ago_list):
 	
 	for days_ago in days_ago_list:
 		portfolio,value,date = get_current_value(stonks_df,transfers_df,days_ago)
-		#print('${:,.2f}'.format(value),portfolio)
 		to_return.append([portfolio,value,date])
 		
 	return to_return
 
-def get_current_value(stonks_df,transfers_df,days_ago):
-	#print('Values from {} days ago'.format(days_ago))
+def get_current_value(stonks_df,transfers_df,count_back_days_ago):
 	#Add up deposits and withdrawals
 	value = 0.
 	for index,row in transfers_df.iterrows():
@@ -36,6 +37,12 @@ def get_current_value(stonks_df,transfers_df,days_ago):
 			print('Error in tallying transfers. The row looked like this: \n{}'.format(row))
 	input_value = value
 	
+	days_ago = -1 - count_back_days_ago
+	
+	#Read downloaded file
+	with open('stonks/stonk_info.json') as json_file:
+		stonk_info = json.load(json_file)
+	
 	#Add up stonk values
 	cash = value
 	portfolio = dict()
@@ -43,13 +50,17 @@ def get_current_value(stonks_df,transfers_df,days_ago):
 	for index,row in stonks_df.iterrows():
 		trade_date = datetime.datetime.strptime(row.trade_date,'%m-%d-%Y')
 		
-		this_stonk_df = pn.data.get(row.stonk)
-		position_date = pd.to_datetime(this_stonk_df.index[days_ago])
+		this_stonk_value = stonk_info[row.stonk]
+		position_date = datetime.datetime.strptime(stonk_info['Date'][days_ago],'%Y-%m-%d')
 		
 		if position_date >= trade_date:
-			close_prices = list(this_stonk_df.Close)
+			close_prices = stonk_info[row.stonk]
 			
-			stonk_value[row.stonk] = [list(this_stonk_df.Close)[days_ago],str(this_stonk_df.index[days_ago])[0:10]]
+			stonk_value[row.stonk] = [close_prices[days_ago],position_date]
+			i=0
+			while math.isnan(stonk_value[row.stonk][0]):
+				i-=1
+				stonk_value[row.stonk][0] = close_prices[days_ago-i]
 			
 			if row.trade_type == 'buy':
 				value = value + row.shares * (stonk_value[row.stonk][0] - row.price)
@@ -62,16 +73,6 @@ def get_current_value(stonks_df,transfers_df,days_ago):
 			portfolio = update_portfolio(row,portfolio)
 
 	portfolio['Cash'] = cash
-	#for s in portfolio:
-	#	if s == 'Cash':
-	#		print('{} - ${:,.2f}'.format(s,portfolio[s]))
-	#	elif portfolio[s] == 1:
-	#		print('{} - {} share (${:,.2f} @ {})'.format(s,portfolio[s],stonk_value[s][0],stonk_value[s][1]))
-	#	elif portfolio[s] > 1:
-	#		print('{} - {} shares (${:,.2f} each @ {})'.format(s,portfolio[s],stonk_value[s][0],stonk_value[s][1]))
-	#print('Total portfolio value - ${:,.2f}'.format(value))
-	#print('\t {:.1f}% of the input value (${:,.2f})'.format(100.*value/input_value,input_value))  
-	#print('Total portfolio value {} workdays ago - ${:,.2f}'.format(days_ago,value))
 	return portfolio,value,position_date
 
 def update_portfolio(r,p):
