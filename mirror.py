@@ -294,7 +294,7 @@ def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_lis
 				sign = '+'
 			else:
 				sign = ''
-			text = '{}: '.format(time_ago[i])+sign+'{:,.2f}%'.format(100.*difference/stonk_list[i][1])
+			text = '{}: ${:,.2f} ({}{:,.2f}%)'.format(time_ago[i],stonk_list[i][1],sign,100.*difference/stonk_list[i][1])
 			text_display(main_window,text,xpos,ypos,white,black,main_font)
 			ypos+=main_space
 			i+=1
