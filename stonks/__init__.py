@@ -6,12 +6,13 @@ import math
 
 def main():
 	#days_ago_list = [0,1,5,20]
-	days_ago_list = range(30)
+	#days_ago_list = range(30)
+	days_ago_list = [0]
 	
 	data = stonks(days_ago_list)
 	
 	for i in data:
-		print(i[1])
+		print(i)
 	
 def stonks(days_ago_list):
 	stonks_df = pd.read_csv('stonks/stonks.txt',delimiter='\t')
@@ -50,17 +51,18 @@ def get_current_value(stonks_df,transfers_df,count_back_days_ago):
 	for index,row in stonks_df.iterrows():
 		trade_date = datetime.datetime.strptime(row.trade_date,'%m-%d-%Y')
 		
-		this_stonk_value = stonk_info[row.stonk]
 		position_date = datetime.datetime.strptime(stonk_info['Date'][days_ago],'%Y-%m-%d')
 		
 		if position_date >= trade_date:
 			close_prices = stonk_info[row.stonk]
 			
 			stonk_value[row.stonk] = [close_prices[days_ago],position_date]
+			
 			i=0
 			while math.isnan(stonk_value[row.stonk][0]):
-				i-=1
+				i+=1
 				stonk_value[row.stonk][0] = close_prices[days_ago-i]
+				stonk_value[row.stonk][1] = datetime.datetime.strptime(stonk_info['Date'][days_ago-i],'%Y-%m-%d')
 			
 			if row.trade_type == 'buy':
 				value = value + row.shares * (stonk_value[row.stonk][0] - row.price)
