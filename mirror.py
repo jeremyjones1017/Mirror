@@ -264,7 +264,7 @@ def do_time(main_window,fonts,spaces,screen_width,screen_height,now):
 	
 def get_stonks():
 	import stonks
-	days_ago_list = [0,1,5,20]
+	days_ago_list = [0,1,5,20,60,240]
 	try:
 		stonk_list = stonks.stonks(days_ago_list)
 	except:
@@ -275,7 +275,7 @@ def display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_lis
 	[small_font,main_font,big_font,bigger_font] = fonts
 	[main_space,big_space,bigger_space] = spaces
 	
-	time_ago = ['0d','1d','1wk','1mo']
+	time_ago = ['0d','1d','1wk','1mo','3mo','1yr']
 	
 	xpos = 0.14*screen_width
 	ypos = 0.12*screen_height
