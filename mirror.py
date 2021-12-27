@@ -151,7 +151,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			text_display(main_window,'Sitting Room',0.9*screen_width,0.02*screen_height,white,black,main_font)
 			text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
 			
-			text_display(main_window,"Bedroom",0.9*screen_width,0.09*screen_height,white,black,main_font)
+			text_display(main_window,"Mirror",0.9*screen_width,0.09*screen_height,white,black,main_font)
 			text_display(main_window,str(current_mirror_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
 
 			text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
@@ -562,12 +562,13 @@ def outdoor_temp_color_scale(temp):
 	return temp_color
 
 def check_online_time(now):
-	turn_off_time = now.replace(hour=23, minute=0,second=0,microsecond=0)
-	turn_on_time = now.replace(hour=7, minute=0,second=0,microsecond=0)
-	if now > turn_on_time and now < turn_off_time:
-		return True
-	else:
-		return False
+	#turn_off_time = now.replace(hour=23, minute=0,second=0,microsecond=0)
+	#turn_on_time = now.replace(hour=7, minute=0,second=0,microsecond=0)
+	#if now > turn_on_time and now < turn_off_time:
+	#	return True
+	#else:
+	#	return False
+	return True
 
 class weather:
 	def __init__(self):
