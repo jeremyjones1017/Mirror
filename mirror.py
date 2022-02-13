@@ -13,6 +13,7 @@ import pytz
 import wget
 import os
 import csv
+import argparse
 
 #Colors
 black=(0,0,0)
@@ -24,8 +25,16 @@ green=(0,255,0)
 yellow=(255,255,0)
 purple=(128,0,128)
 
-#mirror_path='/home/pi/Programing/Mirror/'
-mirror_path='/home/pi/Mirror/'
+parser = argparse.ArgumentParser(description='Run the mirror')
+parser.add_argument('-win',action='store_true')
+parser.add_argument('-dev',action='store_true')
+
+args=parser.parse_args()
+
+if args.dev == True:
+	mirror_path='/home/pi/Programing/Mirror/'
+else:
+	mirror_path='/home/pi/Mirror/'
 
 def main():
 	mirror_active = check_mirror_state()
@@ -66,11 +75,10 @@ def start_mirror():
 	root = tk.Tk()
 	pygame.init()
 	FPS = 1
-	if len(sys.argv) == 2:
-		if sys.argv[1] == 'w':
-			screen_width = 540
-			screen_height = 960
-			main_window = pygame.display.set_mode((screen_width,screen_height))
+	if args.win == True:
+		screen_width = 540
+		screen_height = 960
+		main_window = pygame.display.set_mode((screen_width,screen_height))
 	else:
 		screen_width = root.winfo_screenwidth()
 		screen_height = root.winfo_screenheight()
@@ -106,6 +114,10 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	#try:
 	location = 'Atlanta'
 	forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
+	if forecast != None:
+		forecast_dt = datetime.datetime.now()
+	else:
+		forecast_dt = None
 	#except:
 	#	offline = True
 	
@@ -116,6 +128,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		today_start = datetime.datetime(now.year, now.month, now.day,0,0,0,0)
 		main_window.fill(black)
 		important_dates_df = read_important_dates()
+		work_dates_df = read_work_dates()
 		
 		
 		online_time = check_online_time(now)
@@ -123,9 +136,9 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		if online_time:
 			do_date(main_window,fonts,spaces,screen_width,screen_height,now)
 			do_time(main_window,fonts,spaces,screen_width,screen_height,now)
-			if i%300 == 0:
-				stonk_list = get_stonks()
-			display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list)
+			#if i%300 == 0:
+			#	stonk_list = get_stonks()
+			#display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list)
 			
 			try:
 				times,temps_c,temps,hum = read_records(now,'office')
@@ -139,7 +152,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				current_mirror_temp = int(temps[-1])
 			except:
 				times,temps_c,temps,hum = [[0],[0],[0],[0]]
-				current_cas_temp = '--'
+				current_mirror_temp = '--'
 			try:
 				times,temps_c,temps,hum = read_records(now,'cassian_room')
 				current_cas_temp = int(temps[-1])
@@ -159,6 +172,8 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 
 			if i%300 == 0 and i != 0:
 				forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
+				if forecast != None:
+					forecast_dt = now
 				
 			text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,white,black,main_font)
 			if forecast != None:
@@ -166,7 +181,10 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
 			else:
 				text_display(main_window,'--',0.9*screen_width,0.23*screen_height+big_space,white,black,bigger_font)
+			if forecast_dt != None:
+				text_display(main_window,'Updated: {}'.format(forecast_dt.strftime('(%-m/%-d) %H:%M')),0.9*screen_width,0.23*screen_height+big_space+bigger_space,white,black,main_font)
 			
+			'''
 			if forecast != None:
 				temp_color = outdoor_temp_color_scale(forecast.current_temp)
 				forecast_space = 0
@@ -219,11 +237,14 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 						forecast_space += main_space
 						text_display(main_window,'Low: '+str(int(forecast.min_temps[ind]))+u'\N{DEGREE SIGN} High: '+str(int(forecast.max_temps[ind]))+u'\N{DEGREE SIGN} ',long_term_forecast_xpos,long_term_forecast_ypos+forecast_space,temp_color,black,main_font)
 						forecast_space += main_space
-				
+				'''
 	
 			if i%60 == 0:
 				important_dates_df = read_important_dates()
+				work_dates_df = read_work_dates()
 			do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
+			do_work_dates(main_window,fonts,spaces,screen_width,screen_height,work_dates_df,now)
+			
 			
 			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
 			cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
@@ -231,7 +252,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
 		
 		for event in pygame.event.get():
-			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)):
+			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)) or (event.type == pygame.MOUSEBUTTONUP):
 				pygame.quit()
 				sys.exit()
 		pygame.display.update()
@@ -403,6 +424,51 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 		
 		text_display(main_window,text,xpos,ypos+event_space,text_color,black,main_font)
 		event_space += main_space
+
+def read_work_dates():
+	fn = mirror_path+'work_dates.txt'
+	df = pd.read_csv(fn,delimiter='\t')
+	
+	return df
+
+def do_work_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):
+	[small_font,main_font,big_font,bigger_font] = fonts
+	[main_space,big_space,bigger_space] = spaces
+	
+	xpos = 0.15*screen_width
+	ypos = 0.25*screen_height
+	
+	event_space = 0
+	text_display(main_window,'Work',xpos,ypos,white,black,big_font)
+	event_space += big_space
+	for index,row in df.iterrows():
+		start = datetime.datetime.strptime(row.Start,'%m/%d/%Y %H:%M')
+		end = datetime.datetime.strptime(row.End,'%m/%d/%Y %H:%M')
+		if end > now:
+			days_until_start = (start - now).total_seconds()/3600./24.
+			fadeout = 21
+			if days_until_start > fadeout:
+				text_color = (0,0,0)
+			else:
+				gs = int(255-days_until_start*255/fadeout)
+				if gs > 255: gs = 255
+				text_color = (gs,gs,gs)
+			desc_text = '{}'.format(row.Description)
+			text_display(main_window,desc_text,xpos,ypos+event_space,text_color,black,main_font)
+			event_space += main_space
+			if (end - start).days == 0 and now > start:
+				dt_text = 'Until {}'.format(end.strftime('%H:%M'))
+			elif (end - start).days == 0:
+				dt_text = '{} - {}'.format(start.strftime('%a (%-m/%-d): %H:%M'),end.strftime('%H:%M'))
+			elif now > start:
+				dt_text = 'Until {}'.format(end.strftime('%a (%-m/%-d) at %H:%M'))
+			elif (end - start).days > 0 and now < start:
+				dt_text = '{} - {}'.format(start.strftime('%a (%-m/%-d): %H:%M'),end.strftime('%a (%-m/%-d): %H:%M'))
+			
+			text_display(main_window,dt_text,xpos,ypos+event_space,text_color,black,main_font)
+			event_space += 2*main_space
+			
+		
 
 def get_weather_forecast(coords,zip_code):
 	n = NOAA()
