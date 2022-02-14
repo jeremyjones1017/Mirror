@@ -128,7 +128,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		today_start = datetime.datetime(now.year, now.month, now.day,0,0,0,0)
 		main_window.fill(black)
 		important_dates_df = read_important_dates()
-		work_dates_df = read_work_dates()
+		event_dates_df = read_event_dates()
 		
 		
 		online_time = check_online_time(now)
@@ -241,9 +241,9 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	
 			if i%60 == 0:
 				important_dates_df = read_important_dates()
-				work_dates_df = read_work_dates()
+				event_dates_df = read_event_dates()
 			do_important_dates(main_window,fonts,spaces,screen_width,screen_height,important_dates_df,now)
-			do_work_dates(main_window,fonts,spaces,screen_width,screen_height,work_dates_df,now)
+			do_event_dates(main_window,fonts,spaces,screen_width,screen_height,event_dates_df,now)
 			
 			
 			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
@@ -425,22 +425,22 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 		text_display(main_window,text,xpos,ypos+event_space,text_color,black,main_font)
 		event_space += main_space
 
-def read_work_dates():
-	fn = mirror_path+'work_dates.txt'
+def read_event_dates():
+	fn = mirror_path+'event_dates.txt'
 	df = pd.read_csv(fn,delimiter='\t')
 	
 	return df
 
-def do_work_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):
+def do_event_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):
 	[small_font,main_font,big_font,bigger_font] = fonts
 	[main_space,big_space,bigger_space] = spaces
 	
 	xpos = 0.15*screen_width
-	ypos = 0.25*screen_height
+	ypos = 0.15*screen_height
 	
 	event_space = 0
-	text_display(main_window,'Work',xpos,ypos,white,black,big_font)
-	event_space += big_space
+	#text_display(main_window,'Work',xpos,ypos,white,black,big_font)
+	#event_space += big_space
 	for index,row in df.iterrows():
 		start = datetime.datetime.strptime(row.Start,'%m/%d/%Y %H:%M')
 		end = datetime.datetime.strptime(row.End,'%m/%d/%Y %H:%M')
