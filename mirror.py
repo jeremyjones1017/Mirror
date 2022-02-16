@@ -453,8 +453,15 @@ def do_event_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):
 				gs = int(255-days_until_start*255/fadeout)
 				if gs > 255: gs = 255
 				text_color = (gs,gs,gs)
+				
+			is_active = False
+			if now > start:
+				is_active = True
 			desc_text = '{}'.format(row.Description)
-			text_display(main_window,desc_text,xpos,ypos+event_space,text_color,black,main_font)
+			if is_active:
+				text_display(main_window,desc_text,xpos,ypos+event_space,black,white,main_font)
+			else:
+				text_display(main_window,desc_text,xpos,ypos+event_space,text_color,black,main_font)
 			event_space += main_space
 			if (end - start).days == 0 and now > start:
 				dt_text = 'Until {}'.format(end.strftime('%H:%M'))
@@ -465,7 +472,10 @@ def do_event_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):
 			elif (end - start).days > 0 and now < start:
 				dt_text = '{} - {}'.format(start.strftime('%a (%-m/%-d): %H:%M'),end.strftime('%a (%-m/%-d): %H:%M'))
 			
-			text_display(main_window,dt_text,xpos,ypos+event_space,text_color,black,main_font)
+			if is_active:
+				text_display(main_window,dt_text,xpos,ypos+event_space,black,white,main_font)
+			else:
+				text_display(main_window,dt_text,xpos,ypos+event_space,text_color,black,main_font)
 			event_space += 2*main_space
 			
 		
