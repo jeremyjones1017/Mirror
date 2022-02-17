@@ -112,12 +112,12 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 	
 	#offline = False
 	#try:
-	location = 'Atlanta'
-	forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
-	if forecast != None:
-		forecast_dt = datetime.datetime.now()
-	else:
-		forecast_dt = None
+	#location = 'Atlanta'
+	#forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
+	#if forecast != None:
+	#	forecast_dt = datetime.datetime.now()
+	#else:
+	#	forecast_dt = None
 	#except:
 	#	offline = True
 	
@@ -170,19 +170,19 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
 			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,white,black,bigger_font)
 
-			if i%300 == 0 and i != 0:
-				forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
-				if forecast != None:
-					forecast_dt = now
+			#if i%300 == 0 and i != 0:
+			#	forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
+			#	if forecast != None:
+			#		forecast_dt = now
 				
-			text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,white,black,main_font)
-			if forecast != None:
-				temp_color = outdoor_temp_color_scale(forecast.current_temp)
-				text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
-			else:
-				text_display(main_window,'--',0.9*screen_width,0.23*screen_height+big_space,white,black,bigger_font)
-			if forecast_dt != None:
-				text_display(main_window,'Updated: {}'.format(forecast_dt.strftime('(%-m/%-d) %H:%M')),0.9*screen_width,0.23*screen_height+big_space+bigger_space,white,black,main_font)
+			#text_display(main_window,"Atlanta",0.9*screen_width,0.23*screen_height,white,black,main_font)
+			#if forecast != None:
+			#	temp_color = outdoor_temp_color_scale(forecast.current_temp)
+			#	text_display(main_window,str(int(forecast.current_temp))+u'\N{DEGREE SIGN}',0.9*screen_width,0.23*screen_height+big_space,temp_color,black,bigger_font)
+			#else:
+			#	text_display(main_window,'--',0.9*screen_width,0.23*screen_height+big_space,white,black,bigger_font)
+			#if forecast_dt != None:
+			#	text_display(main_window,'Updated: {}'.format(forecast_dt.strftime('(%-m/%-d) %H:%M')),0.9*screen_width,0.23*screen_height+big_space+bigger_space,white,black,main_font)
 			
 			'''
 			if forecast != None:
