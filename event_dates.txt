@@ -1,13 +1,21 @@
 Start	End	Description
-2/17/2022 16:00	2/17/2022 22:00	Jeep Teaching Intro Lab
-2/18/2022 13:00	2/18/2022 16:00	Jeep Teaching Advanced Lab
-2/23/2022 13:00	2/23/2022 16:00	Jeep Teaching Advanced Lab
-2/24/2022 16:00	2/24/2022 22:00	Jeep Teaching Intro Lab
-2/25/2022 13:00	2/25/2022 16:00	Jeep Teaching Advanced Lab
-3/2/2022 13:00	3/2/2022 16:00	Jeep Teaching Advanced Lab
+2/28/2022 9:00	2/28/2022 16:00 Car to Shop	
 3/2/2022 16:00	3/2/2022 18:00	Jeremy Meeting
 3/3/2022 16:00	3/3/2022 22:00	Jeep Teaching Intro Lab
-3/4/2022 13:00	3/4/2022 16:00	Jeep Teaching Advanced Lab
 3/15/2022 17:00	3/19/2022 10:00	Jeremy Observing
+3/16/2022 16:00	3/16/2022 18:00	Jeremy Meeting
+3/16/2022 13:00	3/16/2022 16:00	Jeep Teaching Advanced Lab
+3/17/2022 16:00	3/17/2022 22:00	Jeep Teaching Intro Lab
+3/18/2022 13:00	3/18/2022 16:00	Jeep Teaching Advanced Lab
+3/23/2022 13:00	3/23/2022 16:00	Jeep Teaching Advanced Lab
+3/24/2022 16:00	3/24/2022 22:00	Jeep Teaching Intro Lab
+3/25/2022 13:00	3/25/2022 16:00	Jeep Teaching Advanced Lab
+3/30/2022 16:00	3/30/2022 18:00	Jeremy Meeting
+3/30/2022 13:00	3/30/2022 16:00	Jeep Teaching Advanced Lab
+3/31/2022 16:00	3/31/2022 22:00	Jeep Teaching Intro Lab
+4/1/2022 13:00	4/1/2022 16:00	Jeep Teaching Advanced Lab
 4/5/2022 17:00	4/6/2022 10:00	Jeremy Observing
-
+4/6/2022 13:00	4/6/2022 16:00	Jeep Teaching Advanced Lab
+4/7/2022 16:00	4/7/2022 22:00	Jeep Teaching Intro Lab
+4/8/2022 13:00	4/8/2022 16:00	Jeep Teaching Advanced Lab
+4/13/2022 16:00	4/13/2022 18:00	Jeremy Meeting
