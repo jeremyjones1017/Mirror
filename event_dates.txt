@@ -2,6 +2,8 @@ Start	End	Description
 2/28/2022 9:00	2/28/2022 16:00	Car to Shop
 3/2/2022 16:00	3/2/2022 18:00	Jeremy Meeting
 3/3/2022 16:00	3/3/2022 22:00	Jeep Teaching Intro Lab
+3/9/2022 10:00	3/9/2022 12:00	Exterminators Showing Up
+3/9/2022 12:00	3/9/2022 14:00	Luncheon with Theo
 3/15/2022 17:00	3/19/2022 10:00	Jeremy Observing
 3/16/2022 16:00	3/16/2022 18:00	Jeremy Meeting
 3/16/2022 13:00	3/16/2022 16:00	Jeep Teaching Advanced Lab
