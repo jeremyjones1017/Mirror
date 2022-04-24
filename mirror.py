@@ -246,7 +246,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			do_event_dates(main_window,fonts,spaces,screen_width,screen_height,event_dates_df,now)
 			
 			
-			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
+			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.bmp')
 			cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
 			rect = cassian_img.get_rect()
 			main_window.blit(cassian_img,(int(0.5*screen_width-rect.center[0]),int(0.8*screen_height)))
