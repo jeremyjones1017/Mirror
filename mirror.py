@@ -428,7 +428,7 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 def read_event_dates():
 	fn = mirror_path+'event_dates.txt'
 	df = pd.read_csv(fn,delimiter='\t')
-	print(df)
+	#print(df)
 	return df
 
 def do_event_dates(main_window,fonts,spaces,screen_width,screen_height,df,now):

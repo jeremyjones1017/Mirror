@@ -1,16 +1,8 @@
 Start	End	Description
-3/30/2022 16:00	3/30/2022 18:00	Jeremy Meeting
-3/30/2022 13:00	3/30/2022 16:00	Jeep Teaching Advanced Lab
-3/31/2022 16:00	3/31/2022 22:00	Jeep Teaching Intro Lab
-4/1/2022 13:00	4/1/2022 16:00	Jeep Teaching Advanced Lab
-4/1/2022 19:00	4/1/2022 22:00	Jeep Observing
-4/5/2022 17:00	4/6/2022 10:00	Jeremy Observing
-4/6/2022 13:00	4/6/2022 16:00	Jeep Teaching Advanced Lab
-4/7/2022 16:00	4/7/2022 22:00	Jeep Teaching Intro Lab
-4/8/2022 13:00	4/8/2022 16:00	Jeep Teaching Advanced Lab
-4/11/2022 9:00	4/15/2022 17:00	Engineering
-4/13/2022 16:00	4/13/2022 18:00	Jeremy Meeting
-4/13/2022 13:00	4/13/2022 16:00	Jeep Teaching Advanced Lab
-4/14/2022 16:00	4/14/2022 22:00	Jeep Teaching Intro Lab
-4/15/2022 13:00	4/15/2022 16:00	Jeep Teaching Advanced Lab
-4/21/2022 12:00	4/21/2022 13:00	Crocodile Dave Arriving
+4/25/2022 4:00	4/25/2022 12:30	Jeremy Conference Day 1
+4/26/2022 4:00	4/26/2022 12:30	Jeremy Conference Day 2
+4/26/2022 14:30	4/26/2022 15:30	Jeremy Conference Public Talk
+4/27/2022 4:00	4/27/2022 7:15	Jeremy Conference Day 3
+4/27/2022 8:00	4/27/2022 8:30	Take Odo to Vet
+4/28/2022 4:00	4/28/2022 12:30	Jeremy Conference Day 4
+4/29/2022 4:00	4/29/2022 12:30	Jeremy Conference Day 5
