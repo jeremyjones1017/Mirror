@@ -249,7 +249,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 			cassian_img = pygame.image.load(mirror_path+'images/Cassian_Nov_21_2020.jpg')
 			cassian_img = pygame.transform.rotozoom(cassian_img, 0., 0.08)
 			rect = cassian_img.get_rect()
-			main_window.blit(cassian_img,(int(0.5*screen_width-rect.center[0]),int(0.8*screen_height)))
+			main_window.blit(cassian_img,(0.5*screen_width-rect.center[0],0.8*screen_height))
 		
 		for event in pygame.event.get():
 			if event.type==pygame.QUIT or (event.type==pygame.KEYUP and (event.key==pygame.K_ESCAPE or event.key==pygame.K_q)) or (event.type == pygame.MOUSEBUTTONUP):
@@ -261,7 +261,7 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		
 def text_display(window,text,xpos,ypos,font_col,back_col,font):
 	disp_surf=font.render(text,True,font_col,back_col)
-	disp_rect = disp_surf.get_rect(center=(int(xpos), int(ypos)))
+	disp_rect = disp_surf.get_rect(center=(xpos,ypos))
 	window.blit(disp_surf,disp_rect)
 
 def do_date(main_window,fonts,spaces,screen_width,screen_height,now):
