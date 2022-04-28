@@ -160,15 +160,17 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 				times,temps_c,temps,hum = [[0],[0],[0],[0]]
 				current_cas_temp = '--'
 			
+			if current_office_temp != '--':
+				text_display(main_window,'Sitting Room',0.9*screen_width,0.02*screen_height,white,black,main_font)
+				text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
 			
-			text_display(main_window,'Sitting Room',0.9*screen_width,0.02*screen_height,white,black,main_font)
-			text_display(main_window,str(current_office_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.02*screen_height+big_space,white,black,bigger_font)
+			if current_mirror_temp != '--':
+				text_display(main_window,"Mirror",0.9*screen_width,0.09*screen_height,white,black,main_font)
+				text_display(main_window,str(current_mirror_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
 			
-			text_display(main_window,"Mirror",0.9*screen_width,0.09*screen_height,white,black,main_font)
-			text_display(main_window,str(current_mirror_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.09*screen_height+big_space,white,black,bigger_font)
-
-			text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
-			text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,white,black,bigger_font)
+			if current_cas_temp != '--':
+				text_display(main_window,"Cassian's Room",0.9*screen_width,0.16*screen_height,white,black,main_font)
+				text_display(main_window,str(current_cas_temp)+u'\N{DEGREE SIGN}',0.9*screen_width,0.16*screen_height+big_space,white,black,bigger_font)
 
 			#if i%300 == 0 and i != 0:
 			#	forecast = get_weather_forecast(coords_dict[location],zip_dict[location])
@@ -411,6 +413,8 @@ def do_important_dates(main_window,fonts,spaces,screen_width,screen_height,df,da
 	for i in zipped:
 		if i[0] == 0:
 			text = '{} is TODAY'.format(i[1])
+		elif i[0] == 1:
+			text = '{} is tomorrow'.format(i[1])
 		else:
 			text = '{} days until {}'.format(i[0],i[1])
 			
