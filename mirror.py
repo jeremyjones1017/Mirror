@@ -136,6 +136,12 @@ def run_mirror(main_window,FPS,fpsclock,screen_width,screen_height):
 		if online_time:
 			do_date(main_window,fonts,spaces,screen_width,screen_height,now)
 			do_time(main_window,fonts,spaces,screen_width,screen_height,now)
+			
+			xpos = 0.5*screen_width
+			ypos = 0.03*screen_height+bigger_space
+			text_display(main_window,'Wifi Network: Tracy-Maureen',xpos,ypos+main_space,white,black,main_font)
+			text_display(main_window,'Password: Thriller!',xpos,ypos+main_space*2,white,black,main_font)
+
 			#if i%300 == 0:
 			#	stonk_list = get_stonks()
 			#display_stonks(main_window,fonts,spaces,screen_width,screen_height,stonk_list)
