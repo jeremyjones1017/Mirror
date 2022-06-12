@@ -1,8 +1,6 @@
 Start	End	Description
-6/8/2022 16:00	6/8/2022 17:30	Jeremy Meeting
-6/9/2022 14:15	6/9/2022 17:00	Jeep Teaching
 6/10/2022 17:00	6/21/2022 20:00	Jeep in Maine
-6/14/2022 14:15	6/15/2022 17:00	Jeep Teaching
+6/14/2022 14:15	6/14/2022 17:00	Jeep Teaching
 6/16/2022 14:15	6/16/2022 17:00	Jeep Teaching
 6/22/2022 16:00	6/22/2022 17:30	Jeremy Meeting
 7/6/2022 16:00	7/6/2022 17:30	Jeremy Meeting
